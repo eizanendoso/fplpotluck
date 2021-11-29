@@ -1,5 +1,3 @@
-streamlit
-pandas
-requests
-numpy
-json
+numpy==1.19.5
+pandas==1.2.4
+streamlit==1.2.0

@@ -60,6 +60,7 @@ def load_points(user_ids, event_num):
     points_dict[names[user]] = [points, transfers, transfer_penalty, total_points]
 
   points_df = pd.DataFrame.from_dict(points_dict, orient='index', columns=['Points', 'Transfers', 'Transfer Penalty', 'Total Points'])
+  points_df['Rank'] = points_df['Points'].rank(ascending=False).astype(int)
   return points_df
 
 @st.cache
@@ -113,10 +114,12 @@ points_bench_dict = { k: [i['points_on_bench'] for i in history[k]["current"]] f
 transfer_penalty_pd = pd.DataFrame.from_dict(transfer_penalty_dict, orient='index', columns=weeks)
 points_pd = pd.DataFrame.from_dict(points_dict, orient='index', columns=weeks)
 rank_pd = points_pd.rank(ascending=False).astype(int)
+
 # rank_pd = points_pd.rank(ascending=False)
 
 cumulative_pts_pd = pd.DataFrame.from_dict(cumulative_pts_dict, orient='index', columns=weeks)
 payout_pd = rank_pd.applymap(lambda x: dollar_values_mapping[x])
+# payout_pd = points_pd.rank(ascending=False) / points_pd.rank(ascending=False).sum() * total_weekly_pot
 
 
 cumulative_rank_pd = cumulative_pts_pd.rank(ascending=False).astype(int)
